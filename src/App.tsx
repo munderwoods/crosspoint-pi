@@ -1,8 +1,14 @@
 import React from 'react';
 import './App.css';
-import Button from '@mui/material/Button';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+import MuiGrid from '@mui/material/Grid';
+import MuiButton from '@mui/material/Button';
+import MuiSelect from '@mui/material/Select';
+import MuiMenuItem from '@mui/material/MenuItem';
+import MuiToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import MuiTextField from '@mui/material/TextField';
+import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
+
 
 function App() {
   const [config, setConfig] = React.useState<Record<string, number> | null>(null);
@@ -28,8 +34,93 @@ function App() {
     savePresetSelected,
     recallPresetSelected,
     videoSelected,
-    audioSelected
+    audioSelected,
+    buildCommand
   ]);
+
+  const theme = createTheme({
+    palette: {
+      primary: {main: "#ccc"},
+      secondary: {main: "#aaa"},
+    },
+  });
+
+  const ToggleButton = styled(MuiToggleButton)({
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.secondary.main,
+    borderColor: theme.palette.primary.main,
+    "&.Mui-selected, &.Mui-selected:hover": {
+      color: theme.palette.primary.dark,
+      backgroundColor: theme.palette.secondary.dark,
+      borderColor: theme.palette.primary.dark,
+    }
+  });
+
+  const Select = styled(MuiSelect)({
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.secondary.main,
+    borderColor: theme.palette.primary.main,
+    "&.Mui-selected, &.Mui-selected:hover": {
+      color: theme.palette.primary.dark,
+      backgroundColor: theme.palette.secondary.dark,
+      borderColor: theme.palette.primary.dark,
+    },
+    '&:before': {
+        borderColor: theme.palette.primary.main,
+    },
+    '&:after': {
+        borderColor: theme.palette.primary.main,
+    },
+    '&:not(.Mui-disabled):hover::before': {
+        borderColor: theme.palette.primary.main,
+    },
+    icon: {
+        fill: theme.palette.primary.main,
+    },
+    root: {
+      color: theme.palette.primary.main,
+    }
+  });
+
+  const MenuItem = styled(MuiMenuItem)({
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.secondary.main,
+    borderColor: theme.palette.primary.main,
+    "&.Mui-selected, &.Mui-selected:hover": {
+      color: theme.palette.primary.dark,
+      backgroundColor: theme.palette.secondary.dark,
+      borderColor: theme.palette.primary.dark,
+    }
+  });
+
+  const TextField = styled(MuiTextField)({
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.secondary.main,
+    borderColor: theme.palette.primary.main,
+    "&.Mui-selected, &.Mui-selected:hover": {
+      color: theme.palette.primary.dark,
+      backgroundColor: theme.palette.secondary.dark,
+      borderColor: theme.palette.primary.dark,
+    }
+  });
+
+  const Button = styled(MuiButton)({
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.secondary.main,
+    borderColor: theme.palette.primary.main,
+    "&.Mui-selected, &.Mui-selected:hover": {
+      color: theme.palette.primary.dark,
+      backgroundColor: theme.palette.secondary.dark,
+      borderColor: theme.palette.primary.dark,
+    }
+  });
+
+  const Grid = styled(MuiGrid)({
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.secondary.main,
+    fontWeight: 900,
+    fontSize: "24px"
+  });
 
   function getConfig() {
     fetch("/config")
@@ -147,15 +238,17 @@ function App() {
       let inputButtons = [];
       for(let i = 1; i <= config.inputAmount; i++){
         inputButtons.push(
-          <Button
+          <ToggleButton
+            value={i}
             disabled={loading}
-            variant="contained"
             key={i}
             onClick={() => setRequestedInput(i)}
-            className={`io-button${requestedInput === i ? " selected" : ""}`}
+            selected={requestedInput === i}
+            style={{height:"5%",width:"5%"}}
+            sx={{m:1}}
           >
             {i}
-          </Button>
+          </ToggleButton>
         )
       }
       return inputButtons;
@@ -167,15 +260,17 @@ function App() {
       let outputButtons = [];
       for(let i = 1; i <= config.outputAmount; i++){
         outputButtons.push(
-          <Button
+          <ToggleButton
+            value={i}
             disabled={loading || savePresetSelected || recallPresetSelected}
-            variant="contained"
             key={i}
             onClick={() => handleOutputSetRequest(i)}
-            className={`io-button${requestedOutputs.includes(i) ? " selected" : ""}`}
+            selected={requestedOutputs.includes(i)}
+            style={{height:"5%",width:"5%"}}
+            sx={{m:1}}
           >
             {i}
-          </Button>
+          </ToggleButton>
         )
       }
       return outputButtons;
@@ -183,6 +278,7 @@ function App() {
   }
 
   function handleOutputSetRequest(outputNumber: number) {
+    console.log(outputNumber)
     if(requestedOutputs.includes(outputNumber)) {
       setRequestedOutputs(requestedOutputs.filter(x => x !== outputNumber).sort());
     } else {
@@ -191,117 +287,133 @@ function App() {
   }
 
   return (
-    <div className="App">
-      {
-        config &&
-        <main>
+    config &&
+    <ThemeProvider theme={theme}>
+      <Grid
+        container
+        alignItems="center"
+        justifyContent="center"
+        direction="column"
+        item
+        spacing={1}
+        style={{ minHeight: '100vh',backgroundColor:"#aaa"}}
+      >
 
-          <section>
-            <h2>Input Amount:</h2>
-            <Select
-              disabled={loading}
-              onChange={e => updateInputs(+e.target.value)}
-              value={config.inputAmount}
-            >
-              {createOptions(32)}
-            </Select>
-            <h2>Output Amount:</h2>
-            <Select
-              disabled={loading}
-              onChange={e => updateOutputs(+e.target.value)}
-              value={config.outputAmount}
-            >
-              {createOptions(32)}
-            </Select>
-          </section>
+        <Grid item justifyContent="center" alignItems="center" style={{display:"flex"}}>
+          Input Amount:
+          <Select
+            disabled={loading}
+            onChange={e => updateInputs(+e.target.value)}
+            value={config.inputAmount}
+          >
+            {createOptions(32)}
+          </Select>
+          Output Amount:
+          <Select
+            disabled={loading}
+            onChange={e => updateOutputs(+e.target.value)}
+            value={config.outputAmount}
+          >
+            {createOptions(32)}
+          </Select>
+        </Grid>
 
-          <section>
-            <Button
+        <Grid item justifyContent="center" alignItems="center" style={{display:"flex"}}>
+          <Button
+            disabled={loading}
+            variant="contained"
+            onClick={runCommand}
+          >
+            Enter
+          </Button>
+          <Button
+            disabled={loading}
+            variant="contained"
+            onClick={reset}
+            className="av-button"
+          >
+            Esc
+          </Button>
+          {"//"}
+          <ToggleButtonGroup>
+            <ToggleButton
+              value={true}
               disabled={loading}
-              variant="contained"
-              onClick={runCommand}
-            >
-                Enter
-            </Button>
-            <Button
-              disabled={loading}
-              variant="contained"
-              className={`av-button${savePresetSelected ? " selected" : ""}`}
+              selected={savePresetSelected}
               onClick={() => {reset(); setSavePresetSelected(!savePresetSelected)}}
             >
               Save Preset
-            </Button>
-            <Button
+            </ToggleButton>
+            <ToggleButton
+              value={true}
               disabled={loading}
-              variant="contained"
-              className={`av-button${recallPresetSelected ? " selected" : ""}`}
+              selected={recallPresetSelected}
               onClick={() => {reset(); setRecallPresetSelected(!recallPresetSelected)}}
             >
-                Recall Preset
-            </Button>
-            <Button
+              Recall Preset
+            </ToggleButton>
+          </ToggleButtonGroup>
+          {"//"}
+          <ToggleButtonGroup>
+            <ToggleButton
+              value={true}
               disabled={loading}
-              variant="contained"
-              onClick={reset}
-              className="av-button"
-            >
-              Esc
-            </Button>
-            {"//"}
-            <Button
-              disabled={loading}
-              variant="contained"
-              className={`av-button${videoSelected ? " selected" : ""}`}
+              selected={videoSelected}
               onClick={() => { avReset(); setVideoSelected(!videoSelected)}}
             >
               Video
-            </Button>
-            <Button
+            </ToggleButton>
+            <ToggleButton
+              value={true}
               disabled={loading}
-              variant="contained"
-              className={`av-button${audioSelected ? " selected" : ""}`}
+              selected={audioSelected}
               onClick={() => {avReset(); setAudioSelected(!audioSelected)}}
             >
               Audio
-            </Button>
-          </section>
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Grid>
 
-          {requestedInput == null && "Select 1 Input // "}
-          {requestedOutputs.length === 0 && "Select at least 1 Output // "}
-          Results: {results.join(', ')}
-          <h2>Inputs</h2>
+        {requestedInput == null && "Select 1 Input // "}
+        {
+          requestedOutputs.length === 0
+            && !savePresetSelected
+            && !recallPresetSelected
+            && "Select at least 1 Output // "
+        }
+        Results: {results.join(', ')}
+        <h2>Inputs</h2>
 
-          <section>
-            {generateInputButtons()}
-          </section>
+        <Grid item textAlign="center" style={{width:"100%"}}>
+          {generateInputButtons()}
+        </Grid>
 
-          <h2>Outputs</h2>
+        <h2>Outputs</h2>
 
-          <section>
-            {generateOutputButtons()}
-          </section>
+        <Grid item textAlign="center" style={{width:"100%"}}>
+          {generateOutputButtons()}
+        </Grid>
 
-          <section>
-            Command
-            <input
-              type="text"
-              disabled={loading}
-              value={command}
-              onChange={e => setCommand(e.target.value)}
-            />
-            <Button
-              disabled={loading}
-              variant="contained"
-              onClick={runCommand}
-              className=""
-            >
-              Run Command
-            </Button>
-          </section>
+          <Grid item justifyContent="center" alignItems="center" style={{display:"flex",color: theme.palette.primary.main}}>
+          Command
+          <TextField
+            type="text"
+            disabled={loading}
+            value={command}
+            onChange={e => setCommand(e.target.value)}
+          />
+          <Button
+            disabled={loading}
+            variant="contained"
+            onClick={runCommand}
+            className=""
+          >
+            Run Command
+          </Button>
+        </Grid>
 
-        </main>
-      }
-    </div>
-  );
+      </Grid>
+    </ThemeProvider>
+  )
 }
 export default App;
