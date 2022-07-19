@@ -2,8 +2,8 @@
   text-align: center;
 }
 
-.settings {
-  background-color: #282c34;
+main {
+  background-color: #354970;
   min-height: 100vh;
   max-height: 100vh;
   display: flex;
@@ -13,6 +13,16 @@
   font-size: calc(10px + 2vmin);
   color: white;
   align-items: space-between;
+}
+
+section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin: 8px;
 }
 
 button.selected {
@@ -32,28 +42,6 @@ button.selected {
   margin: 5px;
   font-size: 16px;
   font-weight: 900;
-}
-
-.enter-button {
-  padding: 20px 100px;
-  margin: 5px;
-  font-size: 16px;
-  font-weight: 900;
-}
-
-select {
-  width: 200px;
-  height: 80px;
-  font-size: 40px;
-  margin: 0 40px;
-}
-
-.settings-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
 }
 
 .App-link {

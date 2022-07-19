@@ -1,5 +1,10 @@
 import React from 'react';
 import './App.css';
+import FormControl from '@mui/material/FormControl';
+import Button from '@mui/material/Button';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
 
 function App() {
   const [config, setConfig] = React.useState<Record<string, number> | null>(null);
@@ -122,7 +127,7 @@ function App() {
   function createOptions(optionAmount: number) {
     let options = [];
     for(let i = 1; i <= optionAmount; i++){
-      options.push(<option key={i} value={i}>{i}</option>)
+      options.push(<MenuItem value={i}>{i}</MenuItem>)
     }
     return options;
   }
@@ -131,7 +136,7 @@ function App() {
     if(config) {
       let inputButtons = [];
       for(let i = 1; i <= config.inputAmount; i++){
-        inputButtons.push(<button disabled={loading} key={i} onClick={() => setRequestedInput(i)} className={`io-button${requestedInput == i ? " selected" : ""}`}>{i}</button>)
+        inputButtons.push(<Button disabled={loading} variant="contained" key={i} onClick={() => setRequestedInput(i)} className={`io-button${requestedInput == i ? " selected" : ""}`}>{i}</Button>)
       }
       return inputButtons;
     }
@@ -141,7 +146,7 @@ function App() {
     if(config) {
       let outputButtons = [];
       for(let i = 1; i <= config.outputAmount; i++){
-        outputButtons.push(<button disabled={loading || savePresetSelected || recallPresetSelected} key={i} onClick={() => handleOutputSetRequest(i)} className={`io-button${requestedOutputs.includes(i) ? " selected" : ""}`}>{i}</button>)
+        outputButtons.push(<Button disabled={loading || savePresetSelected || recallPresetSelected} variant="contained" key={i} onClick={() => handleOutputSetRequest(i)} className={`io-button${requestedOutputs.includes(i) ? " selected" : ""}`}>{i}</Button>)
       }
       return outputButtons;
     }
@@ -159,40 +164,51 @@ function App() {
     <div className="App">
       {
         config &&
-        <div className="settings">
-          <div className="settings-row">
-            <h2>Input Amount: </h2><select disabled={loading} onChange={e => updateInputs(parseInt(e.target.value))} value={config.inputAmount}>
+        <main>
+          <section>
+            <h2>Input Amount:</h2>
+            <Select
+              disabled={loading} 
+              onChange={e => updateInputs(+e.target.value)} 
+              value={config.inputAmount}
+            >
               {createOptions(32)}
-            </select>
-            <h2>Output Amount: </h2><select disabled={loading} onChange={e => updateOutputs(parseInt(e.target.value))} value={config.outputAmount}>
+            </Select>
+
+            <h2>Output Amount:</h2>
+            <Select 
+              disabled={loading} 
+              onChange={e => updateOutputs(+e.target.value)} 
+              value={config.outputAmount}
+            >
               {createOptions(32)}
-            </select>
-          </div>
-          <div className="settings-row">
-            <button disabled={loading} onClick={runCommand} className="enter-button">Enter</button>
-            <button disabled={loading} className={`av-button${savePresetSelected ? " selected" : ""}`} onClick={() => {reset(); setSavePresetSelected(!savePresetSelected)}}>Save Preset</button>
-            <button disabled={loading} className={`av-button${recallPresetSelected ? " selected" : ""}`} onClick={() => {reset(); setRecallPresetSelected(!recallPresetSelected)}}>Recall Preset</button>
-            <button disabled={loading} onClick={reset} className="av-button">Esc</button>//
-            <button disabled={loading} className={`av-button${videoSelected ? " selected" : ""}`} onClick={() => { avReset(); setVideoSelected(!videoSelected)}}>Video</button>
-            <button disabled={loading} className={`av-button${audioSelected ? " selected" : ""}`} onClick={() => {avReset(); setAudioSelected(!audioSelected)}}>Audio</button>
-          </div>
+            </Select>
+          </section>
+          <section>
+            <Button disabled={loading} variant="contained" onClick={runCommand}>Enter</Button>
+            <Button disabled={loading} variant="contained" className={`av-button${savePresetSelected ? " selected" : ""}`} onClick={() => {reset(); setSavePresetSelected(!savePresetSelected)}}>Save Preset</Button>
+            <Button disabled={loading} variant="contained" className={`av-button${recallPresetSelected ? " selected" : ""}`} onClick={() => {reset(); setRecallPresetSelected(!recallPresetSelected)}}>Recall Preset</Button>
+            <Button disabled={loading} variant="contained" onClick={reset} className="av-button">Esc</Button>//
+            <Button disabled={loading} variant="contained" className={`av-button${videoSelected ? " selected" : ""}`} onClick={() => { avReset(); setVideoSelected(!videoSelected)}}>Video</Button>
+            <Button disabled={loading} variant="contained" className={`av-button${audioSelected ? " selected" : ""}`} onClick={() => {avReset(); setAudioSelected(!audioSelected)}}>Audio</Button>
+          </section>
           {requestedInput == null && "Select 1 Input // "}
           {requestedOutputs.length == 0 && "Select at least 1 Output // "}
           Results: {results.join(', ')}
           <h2>Inputs</h2>
-          <div className="settings-row">
+          <section>
             {generateInputButtons()}
-          </div>
+          </section>
           <h2>Outputs</h2>
-          <div className="settings-row">
+          <section>
             {generateOutputButtons()}
-          </div>
-          <div className="settings-row">
+          </section>
+          <section>
             Command
             <input type="text" disabled={loading} value={command} onChange={e => setCommand(e.target.value)}/>
-            <button disabled={loading} onClick={runCommand} className="">Run Command</button>
-          </div>
-        </div>
+            <Button disabled={loading} variant="contained" onClick={runCommand} className="">Run Command</Button>
+          </section>
+        </main>
       }
     </div>
   );
