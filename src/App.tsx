@@ -8,6 +8,7 @@ import MuiToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import MuiTextField from '@mui/material/TextField';
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
+import { SketchPicker } from 'react-color';
 
 
 function App() {
@@ -21,6 +22,8 @@ function App() {
   const [audioSelected, setAudioSelected] = React.useState(false);
   const [results, setResults] = React.useState<string[]>([]);
   const [command, setCommand] = React.useState("");
+  const [primaryColor, setPrimaryColor] = React.useState("#333");
+  const [secondaryColor, setSecondaryColor] = React.useState("#aaa");
   React.useEffect(() => {
     setLoading(true);
     getConfig();
@@ -40,8 +43,8 @@ function App() {
 
   const theme = createTheme({
     palette: {
-      primary: {main: "#ccc"},
-      secondary: {main: "#aaa"},
+      primary: {main: primaryColor},
+      secondary: {main: secondaryColor},
     },
   });
 
@@ -296,14 +299,14 @@ function App() {
         direction="column"
         item
         spacing={1}
-        style={{ minHeight: '100vh',backgroundColor:"#aaa"}}
+        style={{ minHeight: '100vh',minWidth: '100vw'}}
       >
 
         <Grid item justifyContent="center" alignItems="center" style={{display:"flex"}}>
           Input Amount:
           <Select
             disabled={loading}
-            onChange={e => updateInputs(+e.target.value)}
+            onChange={e => updateInputs(e.target.value)}
             value={config.inputAmount}
           >
             {createOptions(32)}
@@ -394,7 +397,7 @@ function App() {
           {generateOutputButtons()}
         </Grid>
 
-          <Grid item justifyContent="center" alignItems="center" style={{display:"flex",color: theme.palette.primary.main}}>
+        <Grid item justifyContent="center" alignItems="center" style={{display:"flex",color: theme.palette.primary.main}}>
           Command
           <TextField
             type="text"
@@ -410,6 +413,19 @@ function App() {
           >
             Run Command
           </Button>
+        </Grid>
+
+        <Grid item justifyContent="center" alignItems="center" style={{display:"flex",color: theme.palette.primary.main}}>
+        Primary Color:
+          <SketchPicker
+            color={primaryColor}
+            onChangeComplete={(color, e) => setPrimaryColor(color.hex)}
+          />
+          Secondary Color:
+          <SketchPicker
+            color={secondaryColor}
+            onChangeComplete={(color, e) => setSecondaryColor(color.hex)}
+          />
         </Grid>
 
       </Grid>
