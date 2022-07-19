@@ -53,7 +53,7 @@ app.post("/command", (req, res) => {
         console.log(`stderr: ${stderr}`);
         return;
     }
-    const results = stdout.split("** read zero bytes from stdin **")[1].split("Terminating...")[0].split(/(\r\n|\n|\r)/gm).filter(x => !x.match(/(\r\n|\n|\r)/gm) && x != '');
+    const results = stdout.split("** read zero bytes from stdin **")[1].split("Terminating...")[0].split(/(\r\n|\n|\r)/gm).filter(x => !x.match(/(\r\n|\n|\r)/gm) && x !== '');
     console.log(`stdout: ${stdout}`);
     res.json({ results: results });
   });

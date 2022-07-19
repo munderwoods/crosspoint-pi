@@ -1,10 +1,8 @@
 import React from 'react';
 import './App.css';
-import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
 
 function App() {
   const [config, setConfig] = React.useState<Record<string, number> | null>(null);
@@ -60,13 +58,25 @@ function App() {
     let operator = '';
     if(videoSelected && audioSelected) {
       operator = '!';
-      setCommand(requestedOutputs.map(requestedOutput => `${requestedInput}*${requestedOutput}${operator}`).join(""));
+      setCommand(
+        requestedOutputs.map(
+          requestedOutput => `${requestedInput}*${requestedOutput}${operator}`
+        ).join("")
+      );
     } else if(videoSelected && !audioSelected) {
       operator = '%';
-      setCommand(requestedOutputs.map(requestedOutput => `${requestedInput}*${requestedOutput}${operator}`).join(""));
+      setCommand(
+        requestedOutputs.map(
+          requestedOutput => `${requestedInput}*${requestedOutput}${operator}`
+        ).join("")
+      );
     } else if(audioSelected && !videoSelected) {
       operator = '$';
-      setCommand(requestedOutputs.map(requestedOutput => `${requestedInput}*${requestedOutput}${operator}`).join(""));
+      setCommand(
+        requestedOutputs.map(
+          requestedOutput => `${requestedInput}*${requestedOutput}${operator}`
+        ).join("")
+      );
     }
     if(savePresetSelected) {
       operator = ',';
@@ -136,7 +146,17 @@ function App() {
     if(config) {
       let inputButtons = [];
       for(let i = 1; i <= config.inputAmount; i++){
-        inputButtons.push(<Button disabled={loading} variant="contained" key={i} onClick={() => setRequestedInput(i)} className={`io-button${requestedInput == i ? " selected" : ""}`}>{i}</Button>)
+        inputButtons.push(
+          <Button
+            disabled={loading}
+            variant="contained"
+            key={i}
+            onClick={() => setRequestedInput(i)}
+            className={`io-button${requestedInput === i ? " selected" : ""}`}
+          >
+            {i}
+          </Button>
+        )
       }
       return inputButtons;
     }
@@ -146,7 +166,17 @@ function App() {
     if(config) {
       let outputButtons = [];
       for(let i = 1; i <= config.outputAmount; i++){
-        outputButtons.push(<Button disabled={loading || savePresetSelected || recallPresetSelected} variant="contained" key={i} onClick={() => handleOutputSetRequest(i)} className={`io-button${requestedOutputs.includes(i) ? " selected" : ""}`}>{i}</Button>)
+        outputButtons.push(
+          <Button
+            disabled={loading || savePresetSelected || recallPresetSelected}
+            variant="contained"
+            key={i}
+            onClick={() => handleOutputSetRequest(i)}
+            className={`io-button${requestedOutputs.includes(i) ? " selected" : ""}`}
+          >
+            {i}
+          </Button>
+        )
       }
       return outputButtons;
     }
@@ -165,49 +195,110 @@ function App() {
       {
         config &&
         <main>
+
           <section>
             <h2>Input Amount:</h2>
             <Select
-              disabled={loading} 
-              onChange={e => updateInputs(+e.target.value)} 
+              disabled={loading}
+              onChange={e => updateInputs(+e.target.value)}
               value={config.inputAmount}
             >
               {createOptions(32)}
             </Select>
-
             <h2>Output Amount:</h2>
-            <Select 
-              disabled={loading} 
-              onChange={e => updateOutputs(+e.target.value)} 
+            <Select
+              disabled={loading}
+              onChange={e => updateOutputs(+e.target.value)}
               value={config.outputAmount}
             >
               {createOptions(32)}
             </Select>
           </section>
+
           <section>
-            <Button disabled={loading} variant="contained" onClick={runCommand}>Enter</Button>
-            <Button disabled={loading} variant="contained" className={`av-button${savePresetSelected ? " selected" : ""}`} onClick={() => {reset(); setSavePresetSelected(!savePresetSelected)}}>Save Preset</Button>
-            <Button disabled={loading} variant="contained" className={`av-button${recallPresetSelected ? " selected" : ""}`} onClick={() => {reset(); setRecallPresetSelected(!recallPresetSelected)}}>Recall Preset</Button>
-            <Button disabled={loading} variant="contained" onClick={reset} className="av-button">Esc</Button>//
-            <Button disabled={loading} variant="contained" className={`av-button${videoSelected ? " selected" : ""}`} onClick={() => { avReset(); setVideoSelected(!videoSelected)}}>Video</Button>
-            <Button disabled={loading} variant="contained" className={`av-button${audioSelected ? " selected" : ""}`} onClick={() => {avReset(); setAudioSelected(!audioSelected)}}>Audio</Button>
+            <Button
+              disabled={loading}
+              variant="contained"
+              onClick={runCommand}
+            >
+                Enter
+            </Button>
+            <Button
+              disabled={loading}
+              variant="contained"
+              className={`av-button${savePresetSelected ? " selected" : ""}`}
+              onClick={() => {reset(); setSavePresetSelected(!savePresetSelected)}}
+            >
+              Save Preset
+            </Button>
+            <Button
+              disabled={loading}
+              variant="contained"
+              className={`av-button${recallPresetSelected ? " selected" : ""}`}
+              onClick={() => {reset(); setRecallPresetSelected(!recallPresetSelected)}}
+            >
+                Recall Preset
+            </Button>
+            <Button
+              disabled={loading}
+              variant="contained"
+              onClick={reset}
+              className="av-button"
+            >
+              Esc
+            </Button>
+            {"//"}
+            <Button
+              disabled={loading}
+              variant="contained"
+              className={`av-button${videoSelected ? " selected" : ""}`}
+              onClick={() => { avReset(); setVideoSelected(!videoSelected)}}
+            >
+              Video
+            </Button>
+            <Button
+              disabled={loading}
+              variant="contained"
+              className={`av-button${audioSelected ? " selected" : ""}`}
+              onClick={() => {avReset(); setAudioSelected(!audioSelected)}}
+            >
+              Audio
+            </Button>
           </section>
+
           {requestedInput == null && "Select 1 Input // "}
-          {requestedOutputs.length == 0 && "Select at least 1 Output // "}
+          {requestedOutputs.length === 0 && "Select at least 1 Output // "}
           Results: {results.join(', ')}
           <h2>Inputs</h2>
+
           <section>
             {generateInputButtons()}
           </section>
+
           <h2>Outputs</h2>
+
           <section>
             {generateOutputButtons()}
           </section>
+
           <section>
             Command
-            <input type="text" disabled={loading} value={command} onChange={e => setCommand(e.target.value)}/>
-            <Button disabled={loading} variant="contained" onClick={runCommand} className="">Run Command</Button>
+            <input
+              type="text"
+              disabled={loading}
+              value={command}
+              onChange={e => setCommand(e.target.value)}
+            />
+            <Button
+              disabled={loading}
+              variant="contained"
+              onClick={runCommand}
+              className=""
+            >
+              Run Command
+            </Button>
           </section>
+
         </main>
       }
     </div>
