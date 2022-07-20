@@ -126,7 +126,7 @@ function App() {
   });
 
   function getConfig() {
-    fetch("/config")
+    fetch("http://localhost:3001/config")
       .then((res) => res.json())
       .then((data) => {
         setConfig(data.data)
@@ -184,7 +184,7 @@ function App() {
 
   function runCommand() {
     setLoading(true)
-    fetch("/command", {
+    fetch("http://localhost:3001/command", {
       method: "POST",
       body: JSON.stringify({ command: command}),
       headers: {
@@ -203,7 +203,7 @@ function App() {
   function updateInputs(e: SelectChangeEvent<unknown>) {
     const inputAmount = e.target.value as number;
     setLoading(true)
-    fetch("/inputs", {
+    fetch("http://localhost:3001/inputs", {
       method: "PUT",
       body: JSON.stringify({ inputAmount: inputAmount }),
       headers: {
@@ -218,7 +218,7 @@ function App() {
   function updateOutputs(e: SelectChangeEvent<unknown>) {
     const outputAmount = e.target.value as number;
     setLoading(true)
-    fetch("/outputs", {
+    fetch("http://localhost:3001/outputs", {
       method: "PUT",
       body: JSON.stringify({ outputAmount: outputAmount }),
       headers: {
