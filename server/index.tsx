@@ -1,7 +1,7 @@
 const express = require("express");
 const { exec } = require("child_process");
 const fs = require('fs');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 
 
 const PORT = process.env.PORT || 3001;

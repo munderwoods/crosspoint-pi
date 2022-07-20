@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import MuiGrid from '@mui/material/Grid';
 import MuiButton from '@mui/material/Button';
-import MuiSelect from '@mui/material/Select';
+import MuiSelect, {SelectChangeEvent} from '@mui/material/Select';
 import MuiMenuItem from '@mui/material/MenuItem';
 import MuiToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
@@ -200,7 +200,8 @@ function App() {
       });
   }
 
-  function updateInputs(inputAmount: number) {
+  function updateInputs(e: SelectChangeEvent<unknown>) {
+    const inputAmount = e.target.value as number;
     setLoading(true)
     fetch("/inputs", {
       method: "PUT",
@@ -214,7 +215,8 @@ function App() {
       .then(() => getConfig());
   }
 
-  function updateOutputs(outputAmount: number) {
+  function updateOutputs(e: SelectChangeEvent<unknown>) {
+    const outputAmount = e.target.value as number;
     setLoading(true)
     fetch("/outputs", {
       method: "PUT",
@@ -306,7 +308,7 @@ function App() {
           Input Amount:
           <Select
             disabled={loading}
-            onChange={e => updateInputs(e.target.value)}
+            onChange={updateInputs}
             value={config.inputAmount}
           >
             {createOptions(32)}
@@ -314,7 +316,7 @@ function App() {
           Output Amount:
           <Select
             disabled={loading}
-            onChange={e => updateOutputs(+e.target.value)}
+            onChange={updateOutputs}
             value={config.outputAmount}
           >
             {createOptions(32)}
