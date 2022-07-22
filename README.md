@@ -1,6 +1,8 @@
 # crosspoint-pi
 
-A portable webapp intended to run on a Rasberry Pi connected to an Extron Crosspoint Video Matrix Switcher.
+A portable webapp intended to run on a Rasberry Pi connected to an [Extron Crosspoint Video Matrix Switcher](https://www.extron.com/Ultra-Wideband-RGB-Matrix-Switchers/prodsubtype-139).
+
+![crosspoint-pi](https://i.imgur.com/jihQqPH.png)
 
 ## Installation:
 
