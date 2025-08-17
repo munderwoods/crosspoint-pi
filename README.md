@@ -6,7 +6,7 @@ A portable webapp intended to run on a Rasberry Pi connected to an [Extron Cross
 
 ## Installation:
 
-- Download the image here: https://drive.google.com/file/d/1T1nQVMzFYv_hL4Z49WroSLrKsQYMWJz4/view?usp=sharing
+- Download the image here: [Link](https://drive.google.com/file/d/1exPTTyh25l4zMl4bGJemgNSFGZxpqFSv/view)
 - Get a USB to Serial adapter. This is the one I use: https://www.amazon.com/gp/product/B0753HBT12/ref=ppx_yo_dt_b_search_asin_image?ie=UTF8&psc=1
 - Burn the image to an SD card that's at least 8GB. Here's a good solution for that: https://www.balena.io/etcher/
 - Hook up the PI to the extron with the USB to Serial adapter in the extron's "remote" port.
